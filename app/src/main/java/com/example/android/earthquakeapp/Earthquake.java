@@ -9,11 +9,15 @@ public class Earthquake {
     private double mMagnitude;
     private String mLocation;
     private long mTimeInMilliseconds;
+    private String mEarthquakeDetailsUrl;
 
-    public Earthquake(double mMagnitude, String mLocation, long mTimeInMilliseconds) {
+
+    public Earthquake(double mMagnitude, String mLocation, long mTimeInMilliseconds, String mEarthquakeDetailsUrl) {
         this.mMagnitude = mMagnitude;
         this.mLocation = mLocation;
         this.mTimeInMilliseconds = mTimeInMilliseconds;
+        this.mEarthquakeDetailsUrl = mEarthquakeDetailsUrl;
+
     }
 
     public double getmMagnitude() {
@@ -26,6 +30,10 @@ public class Earthquake {
 
     public long getmTimeInMilliseconds() {
         return mTimeInMilliseconds;
+    }
+
+    public String getmEarthquakeDetailsUrl() {
+        return mEarthquakeDetailsUrl;
     }
 
 }
