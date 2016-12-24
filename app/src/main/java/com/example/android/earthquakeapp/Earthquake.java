@@ -6,17 +6,17 @@ package com.example.android.earthquakeapp;
 
 public class Earthquake {
 
-    private String mMagnitude;
+    private double mMagnitude;
     private String mLocation;
     private long mTimeInMilliseconds;
 
-    public Earthquake(String mMagnitude, String mLocation, long mTimeInMilliseconds) {
+    public Earthquake(double mMagnitude, String mLocation, long mTimeInMilliseconds) {
         this.mMagnitude = mMagnitude;
         this.mLocation = mLocation;
         this.mTimeInMilliseconds = mTimeInMilliseconds;
     }
 
-    public String getmMagnitude() {
+    public double getmMagnitude() {
         return mMagnitude;
     }
 
