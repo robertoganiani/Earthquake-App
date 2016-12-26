@@ -15,6 +15,8 @@ public class EarthquakeActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
 
+    private EarthquakeAdapter mAdapter;
+
     private static final String USGS_REQUEST_URL =
             "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
 
@@ -23,10 +25,27 @@ public class EarthquakeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
+        ListView earthquakeListView = (ListView) findViewById(R.id.list_view);
+        mAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
+        earthquakeListView.setAdapter(mAdapter);
+
+        /*set click listener*/
+        earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+                Earthquake currentEarthquake = mAdapter.getItem(position);
+
+                Uri earthquakeUri = Uri.parse(currentEarthquake.getmEarthquakeDetailsUrl());
+
+                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, earthquakeUri);
+
+                startActivity(websiteIntent);
+            }
+        });
+
         EarthquakeAsyncTask earthquakeData = new EarthquakeAsyncTask();
         earthquakeData.execute(USGS_REQUEST_URL);
-
-
     }
 
     private class EarthquakeAsyncTask extends AsyncTask<String, Void, ArrayList<Earthquake>> {
@@ -44,23 +63,11 @@ public class EarthquakeActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(ArrayList<Earthquake> result) {
-            ListView earthquakeListView = (ListView) findViewById(R.id.list_view);
+            mAdapter.clear();
 
-            final EarthquakeAdapter adapter = new EarthquakeAdapter(EarthquakeActivity.this, result);
-            earthquakeListView.setAdapter(adapter);
-
-                 /*on list item click open the details page*/
-            earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Earthquake earthquake = adapter.getItem(position);
-                    Uri earthquakeUri = Uri.parse(earthquake.getmEarthquakeDetailsUrl());
-                    Intent intent = new Intent(Intent.ACTION_VIEW, earthquakeUri);
-                    if (intent.resolveActivity(getPackageManager()) != null) {
-                        startActivity(intent);
-                    }
-                }
-            });
+            if (result != null && !result.isEmpty()) {
+                mAdapter.addAll(result);
+            }
         }
     }
 
